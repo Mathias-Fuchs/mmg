@@ -10,7 +10,7 @@ int main() {
   MMG2D_Init_mesh(MMG5_ARG_start, MMG5_ARG_ppMesh, &mesh2, MMG5_ARG_ppMet, &met2, MMG5_ARG_end);
   MMG2D_Set_iparameter(mesh2, met2, MMG2D_IPARAM_verbose, 10);
 
-  // 4 vertices, no tris, no quads, 4 edges so far
+  // 4 vertices, no tris, no quads, no edges so far
   MMG2D_Set_meshSize(mesh2, 4, 0, 0, 0);
 
   // a square [0, 2 * M_PI] x [-M_PI / 2, M_PI / 2] for spherical coordinates in usual lon/lat way
