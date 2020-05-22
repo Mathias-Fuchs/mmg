@@ -19,7 +19,7 @@ int main() {
   
   MMG2D_Set_dparameter(mesh2, met2, MMG2D_DPARAM_hsiz, 0.01);
 
-  // generate a regular fine mesh of the unit square in meshing mode
+  // generate a regular fine mesh of the square in meshing mode
   ier = MMG2D_mmg2dmesh(mesh2, met2);
   if (ier) {
     fprintf(stderr, "error %i during meshing.\n", ier);
@@ -93,5 +93,6 @@ int main() {
   fclose(fp);
   free(verts);
   free(tris);
+  MMG2D_Free_all(MMG5_ARG_start, MMG5_ARG_ppMesh, &mesh2, MMG5_ARG_ppMet, &met2, MMG5_ARG_end);
   return 0;
 }
