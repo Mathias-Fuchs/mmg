@@ -16,7 +16,7 @@ int main() {
   // a square [0, 2 * M_PI] x [-M_PI / 2, M_PI / 2] for spherical coordinates in usual lon/lat way
   double v[8] = {0, -M_PI/2, 2 * M_PI, -M_PI/2, 2 * M_PI, M_PI/2, 0, M_PI/2};
   MMG2D_Set_vertices(mesh2, v, NULL);
-  
+
   MMG2D_Set_dparameter(mesh2, met2, MMG2D_DPARAM_hsiz, 0.01);
 
   // generate a regular fine mesh of the square in meshing mode
@@ -29,7 +29,6 @@ int main() {
   // save the "computational geometry" mesh
   MMG2D_saveMshMesh(mesh2, NULL, "cg.msh");
 
-  
   // remesh with anisotropic metric
   int np, nt, nquad, na;
   MMG2D_Get_meshSize(mesh2, &np, &nt, &nquad, &na);
@@ -68,7 +67,8 @@ int main() {
     fprintf(stdout, "error %i \n", ier);
     exit(1);
   }
-  
+
+  // Save at Gmsh file format
   MMG2D_saveMshMesh(mesh2, NULL, "out2.msh");
 
   // map to 3d and save as obj file
@@ -91,8 +91,10 @@ int main() {
     fprintf(fp, "f %i %i %i\n", tris[3 * i], tris[3 * i +1], tris[3 * i + 2]);
 
   fclose(fp);
+
   free(verts);
   free(tris);
   MMG2D_Free_all(MMG5_ARG_start, MMG5_ARG_ppMesh, &mesh2, MMG5_ARG_ppMet, &met2, MMG5_ARG_end);
+
   return 0;
 }
