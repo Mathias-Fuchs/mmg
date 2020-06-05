@@ -26,7 +26,13 @@ int main() {
     exit(1);
   }
 
-  // save the "computational geometry" mesh
+  MMG2D_Free_solutions(mesh2,met2);
+
+  // save the "computational geometry" mesh and the setted metric
+  // For Medit users
+  MMG2D_saveMesh(mesh2, "cg.mesh");
+  MMG2D_saveSol(mesh2, met2, "cg.sol");
+  // For Gmsh users
   MMG2D_saveMshMesh(mesh2, NULL, "cg.msh");
 
   // remesh with anisotropic metric
@@ -53,12 +59,19 @@ int main() {
     // we add a small amount to the 1-1-entry to make the metric non-singular everywhere
     MMG2D_Set_tensorSol(met2, factor * E + 0.1, factor * F, factor * G, i+1);
   }
-  
+
   // disable hsiz because it is incompatible with an anisotropic metric
   MMG2D_Set_dparameter(mesh2, met2, MMG2D_DPARAM_hsiz, -1);
 
   // set gradation to a not too restrictive value
   MMG2D_Set_dparameter(mesh2, met2, MMG2D_DPARAM_hgrad, 1.5);
+
+  // save the "computational geometry" mesh and the setted metric
+  // For Medit users
+  MMG2D_saveMesh(mesh2, "cg-with-met.mesh");
+  MMG2D_saveSol(mesh2, met2, "cg-with-met.sol");
+  // For Gmsh users
+  MMG2D_saveMshMesh(mesh2, met2, "cg-with-met.msh");
 
   // do it, remesh!
   ier = MMG2D_mmg2dlib(mesh2, met2);
@@ -71,25 +84,38 @@ int main() {
   // Save at Gmsh file format
   MMG2D_saveMshMesh(mesh2, NULL, "out2.msh");
 
-  // map to 3d and save as obj file
+  // Save at Medit one
+  MMG2D_saveMesh(mesh2, "out2.mesh");
+  MMG2D_saveSol(mesh2,met2, "out2.sol");
+
+  // map to 3d and save as Medit file
   MMG2D_Get_meshSize(mesh2, &np, &nt, &nquad, &na);
   verts = realloc(verts, 2 * np * sizeof(double));
   int* tris = (int*) malloc(3 * nt * sizeof(int));
   MMG2D_Get_vertices(mesh2, verts, NULL, NULL, NULL);
   MMG2D_Get_triangles(mesh2, tris, NULL, NULL);
-  
-  FILE *fp = fopen("sphere.obj", "w+");
+
+  printf("\n\n -- Save the final mesh 'sphere-end.mesh' at Medit file format.\n");
+
+  FILE *fp = fopen("sphere-end.mesh", "w+");
+
+  fprintf(fp, "MeshVersionFormatted 2\n\n Dimension 3\n\n Vertices %d\n\n", np);
   for (int i = 0; i < np; i++) {
     double x = verts[2 * i];
     double y = verts[2 * i + 1];
+    /* Parametrization of a sphere of radius 1 from the longitude (x) and
+     * latitude (y) */
     double newx = cos(x) * cos(y);
     double newy = sin(x) * cos(y);
     double newz = sin(y);
-    fprintf(fp, "v %f %f %f\n", newx, newy, newz);
+    fprintf(fp, "%f %f %f 0\n", newx, newy, newz);
   }
-  for (int i = 0; i < nt; i++)
-    fprintf(fp, "f %i %i %i\n", tris[3 * i], tris[3 * i +1], tris[3 * i + 2]);
+  fprintf(fp, "Triangles %d\n", nt);
 
+  for (int i = 0; i < nt; i++)
+    fprintf(fp, "%i %i %i 0\n", tris[3 * i], tris[3 * i +1], tris[3 * i + 2]);
+
+  fprintf(fp, "End\n");
   fclose(fp);
 
   free(verts);
