@@ -50,14 +50,19 @@ int main() {
     double E = cos(y) * cos(y);
     double F = 0.0;
     double G = 1.0;
-    
-    // the following factor was found by trial and error
-    // why does it not work with a factor of one?
-    // how to compute the factor in real life?
-    double factor = 1000.0;
+
+    // The symetric metric tensor (E F \\ F G) may be diagonalized in the basis of its
+    // eigenvectors. The eigenvalue \lambda_i associated to the eigenvector e_i prescribes a
+    // length l_i = 1/\sqrt(\lambda_i) in the direction e_i. This formula allows to compute
+    // a size factor to have sufficiently small edges on the surface of the sphere of radius 1.
+    //
+    // For a detailed explanation, see:
+    // https://forum.mmgtools.org/t/how-to-scale-the-metric-for-anisotropic-meshing-in-mmg2d-example-provided/441/2?u=algiane
+    double factor = 100.0;
 
     // we add a small amount to the 1-1-entry to make the metric non-singular everywhere
-    MMG2D_Set_tensorSol(met2, factor * E + 0.1, factor * F, factor * G, i+1);
+    const double eps = 1.e-1;
+    MMG2D_Set_tensorSol(met2, factor * E + eps, factor * F, factor * G, i+1);
   }
 
   // disable hsiz because it is incompatible with an anisotropic metric
