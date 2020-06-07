@@ -26,14 +26,14 @@ int main() {
     exit(1);
   }
 
-  MMG2D_Free_solutions(mesh2,met2);
-
-  // save the "computational geometry" mesh and the setted metric
+  // save the "computational geometry" mesh and the metric set by MMG2D_mmg2dmesh
   // For Medit users
   MMG2D_saveMesh(mesh2, "cg.mesh");
   MMG2D_saveSol(mesh2, met2, "cg.sol");
   // For Gmsh users
   MMG2D_saveMshMesh(mesh2, NULL, "cg.msh");
+
+  MMG2D_Free_solutions(mesh2,met2);
 
   // remesh with anisotropic metric
   int np, nt, nquad, na;
