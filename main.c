@@ -82,7 +82,7 @@ int main() {
   ier = MMG2D_mmg2dlib(mesh2, met2);
 
   if (ier != 0) {
-    fprintf(stdout, "error %i \n", ier);
+    fprintf(stderr, "error %i during remeshing.\n", ier);
     exit(1);
   }
 
