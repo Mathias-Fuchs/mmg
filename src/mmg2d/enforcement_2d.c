@@ -180,7 +180,8 @@ int MMG2D_bdryenforcement(MMG5_pMesh mesh,MMG5_pSol sol) {
 
       /* Randomly swap edges in the list, while... */
       ilon = lon;
-      srand(time(NULL));
+      // srand(time(NULL));
+      srand(42);
 
       while ( ilon > 0 ) {
         rnd = ( rand() % lon );
