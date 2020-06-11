@@ -38,7 +38,7 @@ int main() {
   // remesh with anisotropic metric
   int np, nt, nquad, na;
   MMG2D_Get_meshSize(mesh2, &np, &nt, &nquad, &na);
-  double* verts = (double*) malloc(2 * np * sizeof(double));
+  double* verts = malloc(2 * np * sizeof(double));
   MMG2D_Get_vertices(mesh2, verts, NULL, NULL, NULL);
   MMG2D_Set_solSize(mesh2, met2, MMG5_Vertex, np, MMG5_Tensor);
   for (int i = 0; i < np; i++) {
@@ -96,7 +96,7 @@ int main() {
   // map to 3d and save as Medit file
   MMG2D_Get_meshSize(mesh2, &np, &nt, &nquad, &na);
   verts = realloc(verts, 2 * np * sizeof(double));
-  int* tris = (int*) malloc(3 * nt * sizeof(int));
+  int* tris = malloc(3 * nt * sizeof(int));
   MMG2D_Get_vertices(mesh2, verts, NULL, NULL, NULL);
   MMG2D_Get_triangles(mesh2, tris, NULL, NULL);
 
